@@ -1,0 +1,186 @@
+import React, { Component } from "react";
+
+import "./styles.css";
+
+var pages = {
+  start: {
+    content: (getData, setData) => (
+      <p>
+        What is your name?
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("name")}
+          onChange={event => setData("name", event.target.value)}
+        />
+        <br />
+        <br />
+        What is your birthday?
+        <br />
+        <br />
+        <input
+          type="date"
+          value={getData("birthday")}
+          onChange={event => setData("birthday", event.target.value)}
+        />
+      </p>
+    ),
+    buttons: [{ label: "Continue", page: "welcome" }]
+  },
+  welcome: {
+    content: (getData, setName) => (
+      <p>Welcome, {getData("name")}! Would you like to have some fun?</p>
+    ),
+    buttons: [{ label: "Yes", page: "mad1" }]
+  },
+  mad1: {
+    content: (getData, setData) => (
+      <p>
+        who, what, when, where, "---", and how
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("madp1")}
+          onChange={event => setData("madp1", event.target.value)}
+        />
+        <br />
+        <br />
+        He had evidently done his "--------" and read his predecessor's reports.
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("madp1.1")}
+          onChange={event => setData("madp1.1", event.target.value)}
+        />
+        <br />
+        <br />
+        Tom is still "---" at us for not doing what he requested.
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("madp1.2")}
+          onChange={event => setData("madp1.2", event.target.value)}
+        />
+        <br />
+        <br />
+      </p>
+    ),
+    buttons: [{ label: "Continue", page: "mad2" }]
+  },
+
+  mad2: {
+    content: (getData, setData) => (
+      <p>
+        "What 'three words'," he finally asked.
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("madp2")}
+          onChange={event => setData("madp2", event.target.value)}
+        />
+        <br />
+        <br />
+      </p>
+    ),
+    buttons: [{ label: "Continue", page: "mad3" }]
+  },
+
+  mad3: {
+    content: (getData, setData) => (
+      <p>
+        You'll have to show me "-----" beautiful flowers.
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("madp3")}
+          onChange={event => setData("madp3", event.target.value)}
+        />
+        <br />
+        <br />
+        They may involve unscrambling words, playing with anagrams, using the
+        letters of one word to make other words, doing Mad "----", or searching
+        for words in a puzzle or word search.
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("madp3.1")}
+          onChange={event => setData("madp3.1", event.target.value)}
+        />
+        <br />
+        <br />
+        I've waited at that station "---" five hours.
+        <br />
+        <br />
+        <input
+          type="text"
+          value={getData("madp3.2")}
+          onChange={event => setData("madp3.2", event.target.value)}
+        />
+        <br />
+        <br />
+      </p>
+    ),
+    buttons: [{ label: "Continue", page: "final" }]
+  },
+
+  final: {
+    content: (getData, setName) => (
+      <p>
+        {getData("madp1")} {getData("madp2")} {getData("madp3")}{" "}
+        {getData("madp1.2")} {getData("madp3.1")} {getData("madp3.2")}{" "}
+        {getData("madp1.1")}
+      </p>
+    ),
+    buttons: [{ label: "Congrats", page: "final" }]
+  }
+};
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      page: "start",
+      name: ""
+    };
+  }
+
+  goToPage(pageName) {
+    this.setState({
+      page: pageName
+    });
+  }
+
+  setData(dataName, dataValue) {
+    var newState = {};
+    newState[dataName] = dataValue;
+    this.setState(newState);
+  }
+
+  render() {
+    var pageData = pages[this.state.page];
+
+    return (
+      <div className="App">
+        {pageData.content(
+          dataName => this.state[dataName] || "",
+          (name, value) => this.setData(name, value)
+        )}
+        {pageData.buttons.map(buttonInfo => (
+          <button onClick={() => this.goToPage(buttonInfo.page)}>
+            {buttonInfo.label}
+          </button>
+        ))}
+      </div>
+    );
+  }
+}
+
+export default App;
